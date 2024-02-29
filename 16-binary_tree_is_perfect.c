@@ -9,12 +9,21 @@
 
 int binary_tree_is_perfect(const binary_tree_t *tree)
 {
+	size_t height, expected_nodes, actual_nodes;
+
 	if (tree == NULL)
 	{
 		return (0);
 	}
-	if ((binary_tree_is_full(tree) == 1) &&
-			(binary_tree_balance(tree) == 0))
+	if (!binary_tree_is_full(tree))
+	{
+		return (0);
+	}
+	height = binary_tree_height(tree);
+	expected_nodes = (1 << height) - 1;
+	actual_nodes = binary_tree_nodes(tree);
+
+	if (actual_nodes == expected_nodes)
 	{
 		return (1);
 	}
@@ -86,4 +95,33 @@ int binary_tree_is_full(const binary_tree_t *tree)
 						binary_tree_is_full(tree->right));
 	}
 	return (0);
+}
+
+/**
+ * binary_tree_nodes - A function that counts the nodes with
+ * at least 1 child in a binary tree
+ * @tree: A pointer to the root node of the tree to count the number of nodes
+ * Return: Number of nodes or 0 if tree is NULL
+ */
+
+size_t binary_tree_nodes(const binary_tree_t *tree)
+{
+	size_t leftNodes, rightNodes;
+
+	if (tree == NULL)
+	{
+		return (0);
+	}
+
+	leftNodes = binary_tree_nodes(tree->left);
+	rightNodes = binary_tree_nodes(tree->right);
+
+	if (tree->left != NULL || tree->right != NULL)
+	{
+		return (1 + leftNodes + rightNodes);
+	}
+	else
+	{
+		return (0);
+	}
 }
